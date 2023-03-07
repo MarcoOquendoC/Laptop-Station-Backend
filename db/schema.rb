@@ -17,8 +17,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_07_211716) do
   create_table "items", force: :cascade do |t|
     t.string "title"
     t.string "item_model"
-    t.string "serial_n"
-    t.string "image"
+    t.string "serial_n", default: "0000"
+    t.string "image", default: "default.jpg"
     t.text "description"
     t.string "brand"
     t.datetime "created_at", null: false
@@ -46,7 +46,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_07_211716) do
     t.string "jti", null: false
     t.string "first_name", null: false
     t.string "last_name", null: false
-    t.boolean "role", null: false
+    t.boolean "role", default: false, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["jti"], name: "index_users_on_jti", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
