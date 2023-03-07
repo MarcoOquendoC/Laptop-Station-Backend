@@ -46,6 +46,6 @@ class ReservesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def reserf_params
-      params.require(:reserf).permit(:date, :user_id_id, :item_id_id)
+      params.require(:reserf).permit(:date, :user_id, :item_id)
     end
 end

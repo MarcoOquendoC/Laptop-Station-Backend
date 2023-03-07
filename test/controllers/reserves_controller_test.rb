@@ -12,7 +12,7 @@ class ReservesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create reserf" do
     assert_difference("Reserve.count") do
-      post reserves_url, params: { reserf: { date: @reserf.date, item_id_id: @reserf.item_id_id, user_id_id: @reserf.user_id_id } }, as: :json
+      post reserves_url, params: { reserf: { date: @reserf.date, item_id: @reserf.item_id, user_id: @reserf.user_id } }, as: :json
     end
 
     assert_response :created
@@ -24,7 +24,7 @@ class ReservesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update reserf" do
-    patch reserf_url(@reserf), params: { reserf: { date: @reserf.date, item_id_id: @reserf.item_id_id, user_id_id: @reserf.user_id_id } }, as: :json
+    patch reserf_url(@reserf), params: { reserf: { date: @reserf.date, item_id: @reserf.item_id, user_id: @reserf.user_id } }, as: :json
     assert_response :success
   end
 
