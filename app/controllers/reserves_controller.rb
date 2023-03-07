@@ -1,5 +1,5 @@
 class ReservesController < ApplicationController
-  before_action :set_reserf, only: %i[ show update destroy ]
+  before_action :set_reserf, only: %i[show update destroy]
 
   # GET /reserves
   def index
@@ -39,13 +39,14 @@ class ReservesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_reserf
-      @reserf = Reserve.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def reserf_params
-      params.require(:reserf).permit(:date, :user_id, :item_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_reserf
+    @reserf = Reserve.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def reserf_params
+    params.require(:reserf).permit(:date, :user_id, :item_id)
+  end
 end
