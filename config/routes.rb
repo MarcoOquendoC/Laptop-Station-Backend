@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :items
+  resources :reserves
   get '/current_user', to: 'current_user#index'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
