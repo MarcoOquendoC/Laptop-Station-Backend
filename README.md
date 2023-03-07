@@ -149,7 +149,7 @@ To run tests, run the following command:
 You can deploy this project in the browser opening the page:
 
 ```
-  localhost:3000
+  localhost:3001
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
