@@ -58,9 +58,19 @@
 </details>
 
 <details>
-<summary>Database</summary>
+  <summary>Database</summary>
   <ul>
     <li><a href="https://www.postgresql.org/">PostgreSQL</a></li>
+  </ul>
+</details>
+
+<details>
+  <summary>Entity Relationship Diagram (ERD)</summary>
+  <ul>
+    <br />
+    <li>
+      <img src="https://user-images.githubusercontent.com/104022866/224164928-6c05f0ab-c29d-48a3-871b-f845007df931.png" alt="ERB Diagram" />
+    </li>
   </ul>
 </details>
 
