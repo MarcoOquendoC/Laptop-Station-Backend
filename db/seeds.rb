@@ -1,4 +1,9 @@
 Item.destroy_all
+User.destroy_all
+
+User.create! ([
+  {email: 'test@test.com', password: 'password', first_name: 'Marcos', last_name: 'Gualtero'},
+])
 
 Item.create!([
   {
@@ -27,4 +32,5 @@ Item.create!([
   }
 ])
 
+p "Created #{User.count} users"
 p "Created #{Item.count} items"
