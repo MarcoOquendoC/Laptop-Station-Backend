@@ -1,8 +1,10 @@
 Item.destroy_all
 User.destroy_all
+Reserve.destroy_all
 
 User.create! ([
   {email: 'test@test.com', password: 'password', first_name: 'Marcos', last_name: 'Gualtero'},
+  {email: 'test1@test.com', password: 'password', first_name: 'Josue', last_name: 'Benavides'},
 ])
 
 Item.create!([
@@ -32,5 +34,13 @@ Item.create!([
   }
 ])
 
+Reserve.create! ([
+  {user_id: User.first.id, item_id: Item.first.id, date: '2023-03-01'},
+  {user_id: User.first.id, item_id: Item.last.id, date: '2023-03-02'},
+  {user_id: User.last.id, item_id: Item.first.id, date: '2023-03-03'},
+  {user_id: User.last.id, item_id: Item.last.id, date: '2023-03-04'},
+])
+
 p "Created #{User.count} users"
 p "Created #{Item.count} items"
+p "Created #{Reserve.count} items"
