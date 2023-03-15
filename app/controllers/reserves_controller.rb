@@ -1,4 +1,5 @@
 class ReservesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_reserf, only: %i[show update destroy]
 
   # GET /reserves
