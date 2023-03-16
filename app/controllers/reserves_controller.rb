@@ -9,7 +9,7 @@ class ReservesController < ApplicationController
     @reserves1 = @reserves.map do |r|
       {
         name: "#{current_user.first_name} #{current_user.last_name}",
-        title: @items.select { |i| i.id = r.item_id }[0].title,
+        title: @items.select { |i| i.id == r.item_id }[0].title,
         id: r.id,
         date: r.date,
         user_id: r.user_id,
