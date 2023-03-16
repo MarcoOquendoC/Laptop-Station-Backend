@@ -35,6 +35,21 @@ class ReservesController < ApplicationController
     else
       render json: @reserf.errors, status: :unprocessable_entity
     end
+    @reserves = Reserve.all.select { |r| r.user_id == current_user.id }
+    @items = Item.all
+    @reserves1 = @reserves.map do |r|
+      {
+        name: "#{current_user.first_name} #{current_user.last_name}",
+        title: @items.select { |i| i.id == r.item_id }[0].title,
+        id: r.id,
+        date: r.date,
+        user_id: r.user_id,
+        item_id: r.item_id,
+        created_at: r.created_at,
+        updated_at: r.updated_at
+      }
+    end
+    render json: @reserves1
   end
 
   # PATCH/PUT /reserves/1
@@ -49,6 +64,21 @@ class ReservesController < ApplicationController
   # DELETE /reserves/1
   def destroy
     @reserf.destroy
+    @reserves = Reserve.all.select { |r| r.user_id == current_user.id }
+    @items = Item.all
+    @reserves1 = @reserves.map do |r|
+      {
+        name: "#{current_user.first_name} #{current_user.last_name}",
+        title: @items.select { |i| i.id == r.item_id }[0].title,
+        id: r.id,
+        date: r.date,
+        user_id: r.user_id,
+        item_id: r.item_id,
+        created_at: r.created_at,
+        updated_at: r.updated_at
+      }
+    end
+    render json: @reserves1
   end
 
   private
