@@ -9,6 +9,7 @@ User.create! ([
 
 Item.create!([
   {
+    user_id: User.first.id,
     title: 'ROG Strix SCAR 15',
     item_model: 'G532LW-AZ088T',
     serial_n: '00000_000_0000000',
@@ -17,6 +18,7 @@ Item.create!([
     brand: 'Asus'
   },
   {
+    user_id: User.first.id,
     title: 'HP ENVY Laptop',
     item_model: '17-cr0747nr',
     serial_n: '00000_000_0000000',
@@ -25,6 +27,7 @@ Item.create!([
     brand: 'HP'
   },
   {
+    user_id: User.first.id,
     title: 'ThinkPad E15 4ta Gen',
     item_model: '21E7S1AM00',
     serial_n: '00000_000_0000000',
