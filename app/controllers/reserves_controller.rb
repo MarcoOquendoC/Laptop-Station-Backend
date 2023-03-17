@@ -94,7 +94,7 @@ class ReservesController < ApplicationController
         created_at: r.created_at,
         updated_at: r.updated_at
       }
-      end
+    end
     @reserves1
   end
 end
