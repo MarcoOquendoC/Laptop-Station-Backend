@@ -1,0 +1,192 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/current_user":
+    get:
+      summary: Returns the current user
+      tags:
+      - Current User
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: returns the current user
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/User"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
+  "/items":
+    get:
+      summary: Retrieves all items
+      tags:
+      - Items
+      responses:
+        '200':
+          description: items found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    user_id:
+                      type: integer
+                    title:
+                      type: string
+                    item_model:
+                      type: string
+                    serial_n:
+                      type: string
+                    image:
+                      type: string
+                    description:
+                      type: string
+                    brand:
+                      type: string
+                  required:
+                  - user_id
+                  - title
+                  - item_model
+                  - serial_n
+                  - description
+        '401':
+          description: unauthorized
+    post:
+      summary: Creates an item
+      tags:
+      - Items
+      security:
+      - Bearer: []
+      parameters: []
+      responses:
+        '201':
+          description: item created
+        '401':
+          description: unauthorized
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                item_model:
+                  type: string
+                serial_n:
+                  type: string
+                image:
+                  type: string
+                  format: binary
+                description:
+                  type: string
+                brand:
+                  type: string
+              required:
+              - title
+              - item_model
+              - serial_n
+              - description
+  "/items/{id}":
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+    get:
+      summary: Retrieves an item
+      tags:
+      - Items
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: item found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                  title:
+                    type: string
+                  item_model:
+                    type: string
+                  serial_n:
+                    type: string
+                  image:
+                    type: string
+                  description:
+                    type: string
+                  brand:
+                    type: string
+                required:
+                - user_id
+                - title
+                - item_model
+                - serial_n
+                - description
+        '401':
+          description: unauthorized
+        '404':
+          description: item not found
+  "/login":
+    post:
+      summary: Logs in a user
+      tags:
+      - Authentication
+      parameters: []
+      responses:
+        '200':
+          description: logged in succesfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  email:
+                    type: string
+                  created_at:
+                    type: string
+                    format: datetime
+                required:
+                - token
+        '401':
+          description: unauthorized
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                    password:
+                      type: string
+                  required:
+                  - email
+                  - password
+servers:
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: www.example.com
