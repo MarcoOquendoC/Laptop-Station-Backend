@@ -4,6 +4,7 @@ RSpec.describe 'api/users/registrations', type: :request do
   describe 'signup' do
     path '/registrations' do
       post 'Registration user' do
+        tags 'Registrations'
         consumes 'application/json'
         produces 'application/json'
         parameter name: :credentials, in: :body, schema: {
