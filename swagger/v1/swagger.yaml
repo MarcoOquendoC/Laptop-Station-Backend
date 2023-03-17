@@ -144,6 +144,136 @@ paths:
           description: unauthorized
         '404':
           description: item not found
+  "/reserves":
+    post:
+      summary: create a reservation
+      tags:
+      - Reserve
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  item_id:
+                    type: integer
+                  user_id:
+                    type: integer
+                  date:
+                    type: string
+                required:
+                - id
+                - item_id
+                - user_id
+                - date
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                  error:
+                    type: string
+                required:
+                - reserves
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                item_id:
+                  type: integer
+                user_id:
+                  type: integer
+                date:
+                  type: string
+              required:
+              - item_id
+              - user_id
+              - date
+    get:
+      summary: list all reserves
+      tags:
+      - Reserve
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  item_id:
+                    type: integer
+                  user_id:
+                    type: integer
+                  date:
+                    type: string
+                required:
+                - id
+                - item_id
+                - user_id
+                - date
+  "/registrations":
+    post:
+      summary: Registration user
+      parameters: []
+      responses:
+        '200':
+          description: sign up succesfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  email:
+                    type: string
+                  created_at:
+                    type: string
+                    format: datetime
+                required:
+                - token
+        '401':
+          description: invalid registration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    first_name:
+                      type: string
+                    last_name:
+                      type: string
+                    email:
+                      type: string
+                    password:
+                      type: string
+                  required:
+                  - email
+                  - password
+                  - first_name
+                  - last_name
   "/login":
     post:
       summary: Logs in a user
