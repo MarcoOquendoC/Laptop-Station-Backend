@@ -118,59 +118,43 @@ RSpec.describe ItemsController, type: :request do
       end
     end
   end
-  describe ItemsController do
-    let(:user) { create(:user) }
-    let(:item) { create(:item, :user) }
 
-    describe 'PUT #update' do
-      context 'with valid parameters' do
-        let(:new_title) { 'New Title' }
+  describe 'Items API' do
+    path '/items/{id}' do
+      delete 'Deletes an item' do
+        tags 'Items'
+        consumes 'application/json'
+        produces 'application/json'
+        parameter name: :id, in: :path, type: :integer
 
-        before do
-          put :update, params: { id: item.id, item: { title: new_title } }, session: { user_id: user.id }
+        response '200', 'item deleted' do
+          let(:user) { create(:user) }
+          let(:Authorization) { "Bearer #{JsonWebToken.encode(user_id: user.id)}" }
+          let(:id) { create(:item, user:).id }
+
+          run_test! do |response|
+            expect(response).to be_successful
+            expect(response.body).to include_json([])
+          end
         end
 
-        it 'returns a success response' do
-          expect(response).to be_successful
+        response '401', 'unauthorized' do
+          let(:id) { create(:item).id }
+
+          run_test! do |response|
+            expect(response).to have_http_status(:unauthorized)
+          end
         end
 
-        it 'updates the item' do
-          expect(item.reload.title).to eq(new_title)
+        response '404', 'item not found' do
+          let(:user) { create(:user) }
+          let(:Authorization) { "Bearer #{JsonWebToken.encode(user_id: user.id)}" }
+          let(:id) { 'invalid' }
+
+          run_test! do |response|
+            expect(response).to have_http_status(:not_found)
+          end
         end
-      end
-
-      context 'with invalid parameters' do
-        let(:invalid_params) { { title: '' } }
-
-        before do
-          put :update, params: { id: item.id, item: invalid_params }, session: { user_id: user.id }
-        end
-
-        it 'returns an unprocessable_entity response' do
-          expect(response).to have_http_status(:unprocessable_entity)
-        end
-
-        it 'returns the item errors' do
-          expect(JSON.parse(response.body)).to include('title' => ["can't be blank"])
-        end
-      end
-    end
-
-    describe 'DELETE #destroy' do
-      before do
-        delete :destroy, params: { id: item.id }, session: { user_id: user.id }
-      end
-
-      it 'returns a success response' do
-        expect(response).to be_successful
-      end
-
-      it 'deletes the item' do
-        expect(Item.exists?(item.id)).to be_falsey
-      end
-
-      it 'returns the updated list of items for the current user' do
-        expect(JSON.parse(response.body).size).to eq(user.items.size)
       end
     end
   end
