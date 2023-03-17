@@ -1,6 +1,11 @@
 require 'swagger_helper'
 
 RSpec.describe ItemsController, type: :request do
+  before do
+    let(:user) { FactoryBot.create(:user) }
+    sign_in :user
+    get :index
+  end
   describe 'Items API' do
     path '/items' do
       get 'Retrieves all items' do
