@@ -1,5 +1,5 @@
 class Item < ApplicationRecord
-  has_many :reserves, dependent: :destroy
+  has_many :reserves, dependent: :destroy, class_name: 'Reserve'
 
   validates :title, presence: true, length: { maximum: 50 }
   validates :item_model, presence: true, length: { maximum: 50 }
