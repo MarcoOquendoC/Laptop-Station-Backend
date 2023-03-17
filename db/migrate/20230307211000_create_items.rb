@@ -7,6 +7,7 @@ class CreateItems < ActiveRecord::Migration[7.0]
       t.string :image, default: 'default.jpg'
       t.text :description
       t.string :brand
+      t.references :user, null: false, foreign_key: true
 
       t.timestamps
     end

@@ -1,4 +1,5 @@
 class ItemsController < ApplicationController
+  before_action :authenticate_user!, except: %i[index]
   before_action :set_item, only: %i[show update destroy]
 
   # GET /items
@@ -36,6 +37,8 @@ class ItemsController < ApplicationController
   # DELETE /items/1
   def destroy
     @item.destroy
+    @items = Item.all.select { |r| r.user_id == current_user.id }
+    render json: @items
   end
 
   private
@@ -47,6 +50,6 @@ class ItemsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def item_params
-    params.require(:item).permit(:title, :item_model, :serial_n, :image, :description, :brand)
+    params.require(:item).permit(:user_id, :title, :item_model, :serial_n, :image, :description, :brand)
   end
 end
