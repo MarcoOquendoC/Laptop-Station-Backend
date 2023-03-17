@@ -1,50 +1,72 @@
-require 'rails_helper'
+require 'swagger_helper'
 
-RSpec.describe ReservesController, type: :controller do
-  describe 'GET #index' do
-    context 'when user is authenticated' do
-      let(:user) { FactoryBot.create(:user) }
-      let!(:item1) { FactoryBot.create(:item) }
-      let!(:item2) { FactoryBot.create(:item) }
-      let!(:reserve1) { FactoryBot.create(:reserve, :user, item: item1) }
-      let!(:reserve2) { FactoryBot.create(:reserve, :user, item: item2) }
+RSpec.describe 'api/users/reserves', type: :request do
+  describe 'reserves' do
+    path '/reserves' do
+      post 'create a reservation' do
+        tags 'Reserve'
+        consumes 'application/json'
+        produces 'application/json'
+        security [bearer_auth: []]
+        parameter name: :reservation, in: :body, schema: {
+          type: :object,
+          properties: {
+            item_id: { type: :integer },
+            user_id: { type: :integer },
+            date: { type: :string }
+          },
+          required: %w[item_id user_id date]
+        }
+        response '200', 'successful' do
+          schema type: :object,
+                 properties: {
+                   id: { type: :integer },
+                   item_id: { type: :integer },
+                   user_id: { type: :integer },
+                   date: { type: :string }
+                 },
+                 required: %w[id item_id user_id date]
 
-      before do
-        sign_in user
-        get :index
+          let(:Authorization) { "Basic #{JSONWebToken.encode(user_id: 1)}" }
+          let(:reserves) do
+            { reserves: { item_id: 1, user_id: 1, date: '2023-12-12' } }
+          end
+          run_test!
+        end
+
+        response '401', 'unauthorized' do
+          schema type: :object,
+                 properties: {
+                   msg: { type: :string },
+                   error: { type: :string }
+                 },
+                 required: ['reserves']
+
+          let(:reserves) do
+            { reserves: { item_id: 1, user_id: 1, date: '2023-12-12' } }
+          end
+          run_test!
+        end
       end
 
-      it 'returns http success' do
-        expect(response).to have_http_status(:success)
-      end
+      get 'list all reserves' do
+        tags 'Reserve'
+        produces 'application/json'
+        security [bearer_auth: []]
 
-      it "returns a JSON array of user's reserves" do
-        reserves = JSON.parse(response.body)
-        expect(reserves.count).to eq(2)
-        expect(reserves[0]['user_id']).to eq(user.id)
-        expect(reserves[0]['item_id']).to eq(item1.id)
-        expect(reserves[1]['user_id']).to eq(user.id)
-        expect(reserves[1]['item_id']).to eq(item2.id)
-      end
+        response '200', 'successful' do
+          schema type: :object,
+                 properties: {
+                   id: { type: :integer },
+                   item_id: { type: :integer },
+                   user_id: { type: :integer },
+                   date: { type: :string }
+                 },
+                 required: %w[id item_id user_id date]
 
-      it "returns the reserve's details and the item's title" do
-        reserves = JSON.parse(response.body)
-        expect(reserves[0]['name']).to eq("#{user.first_name} #{user.last_name}")
-        expect(reserves[0]['title']).to eq(item1.title)
-        expect(reserves[0]['id']).to eq(reserve1.id)
-        expect(reserves[0]['date']).to eq(reserve1.date.strftime('%Y-%m-%d'))
-        expect(reserves[0]['created_at']).to eq(reserve1.created_at.strftime('%Y-%m-%dT%H:%M:%S.%LZ'))
-        expect(reserves[0]['updated_at']).to eq(reserve1.updated_at.strftime('%Y-%m-%dT%H:%M:%S.%LZ'))
-      end
-    end
-
-    context 'when user is not authenticated' do
-      before do
-        get :index
-      end
-
-      it 'returns http unauthorized' do
-        expect(response).to have_http_status(:unauthorized)
+          let(:Authorization) { "Basic #{JSONWebToken.encode(user_id: 1)}" }
+          run_test!
+        end
       end
     end
   end
