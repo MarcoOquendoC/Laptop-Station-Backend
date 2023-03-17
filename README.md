@@ -130,7 +130,7 @@ In order to work on this project, you need to have the following dependencies in
   DB_PASSWORD = HERE-GOES-YOUR-PG-ADMIN-PASSWORD
   DB_PORT = 5432
   
-  SECRET_KEY_BASE = 
+  SECRET_KEY_BASE = fc5fba45f7f2d5de9fcfee8a6b35bdfeaf296661c69d05ed73a71347c447e5d46c2785d581c5f241fee3467a9b73ca784d085727abfe68d9a81b5b9441f08cf9
 ```
 
 - The file database.yml is already configured to use those variables
