@@ -1,0 +1,377 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/current_user":
+    get:
+      summary: Retrieves the current user
+      tags:
+      - Current User
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: current user retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+                    format: email
+                  created_at:
+                    type: string
+                    format: date_time
+                  updated_at:
+                    type: string
+                    format: date_time
+                required:
+                - id
+                - name
+                - email
+                - created_at
+                - updated_at
+        '401':
+          description: unauthorized
+  "/items":
+    get:
+      summary: Retrieves all items
+      tags:
+      - Items
+      responses:
+        '200':
+          description: items found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    user_id:
+                      type: integer
+                    title:
+                      type: string
+                    item_model:
+                      type: string
+                    serial_n:
+                      type: string
+                    image:
+                      type: string
+                    description:
+                      type: string
+                    brand:
+                      type: string
+                  required:
+                  - user_id
+                  - title
+                  - item_model
+                  - serial_n
+                  - description
+        '401':
+          description: unauthorized
+    post:
+      summary: Creates an item
+      tags:
+      - Items
+      security:
+      - Bearer: []
+      parameters: []
+      responses:
+        '201':
+          description: item created
+        '401':
+          description: unauthorized
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                item_model:
+                  type: string
+                serial_n:
+                  type: string
+                image:
+                  type: string
+                  format: binary
+                description:
+                  type: string
+                brand:
+                  type: string
+              required:
+              - title
+              - item_model
+              - serial_n
+              - description
+  "/items/{id}":
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+    get:
+      summary: Retrieves an item
+      tags:
+      - Items
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: item found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                  title:
+                    type: string
+                  item_model:
+                    type: string
+                  serial_n:
+                    type: string
+                  image:
+                    type: string
+                  description:
+                    type: string
+                  brand:
+                    type: string
+                required:
+                - user_id
+                - title
+                - item_model
+                - serial_n
+                - description
+        '401':
+          description: unauthorized
+        '404':
+          description: item not found
+    delete:
+      summary: Deletes an item
+      tags:
+      - Items
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: item deleted
+        '401':
+          description: unauthorized
+        '404':
+          description: item not found
+  "/reserves":
+    post:
+      summary: create a reservation
+      tags:
+      - Reservations
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  item_id:
+                    type: integer
+                  user_id:
+                    type: integer
+                  date:
+                    type: string
+                required:
+                - id
+                - item_id
+                - user_id
+                - date
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                  error:
+                    type: string
+                required:
+                - reserves
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                item_id:
+                  type: integer
+                user_id:
+                  type: integer
+                date:
+                  type: string
+              required:
+              - item_id
+              - user_id
+              - date
+    get:
+      summary: list all reserves
+      tags:
+      - Reservations
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  item_id:
+                    type: integer
+                  user_id:
+                    type: integer
+                  date:
+                    type: string
+                required:
+                - id
+                - item_id
+                - user_id
+                - date
+  "/reserves/{id}":
+    delete:
+      summary: Deletes a reserve
+      tags:
+      - Reservations
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: reserve deleted
+        '401':
+          description: unauthorized
+        '404':
+          description: reserve not found
+  "/registrations":
+    post:
+      summary: Registration user
+      tags:
+      - Registrations
+      parameters: []
+      responses:
+        '200':
+          description: sign up succesfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  email:
+                    type: string
+                  created_at:
+                    type: string
+                    format: datetime
+                required:
+                - token
+        '401':
+          description: invalid registration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    first_name:
+                      type: string
+                    last_name:
+                      type: string
+                    email:
+                      type: string
+                    password:
+                      type: string
+                  required:
+                  - email
+                  - password
+                  - first_name
+                  - last_name
+  "/login":
+    post:
+      summary: Logs in a user
+      tags:
+      - Authentication
+      parameters: []
+      responses:
+        '200':
+          description: logged in succesfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  email:
+                    type: string
+                  created_at:
+                    type: string
+                    format: datetime
+                required:
+                - token
+        '401':
+          description: unauthorized
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                    password:
+                      type: string
+                  required:
+                  - email
+                  - password
+servers:
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: www.example.com
