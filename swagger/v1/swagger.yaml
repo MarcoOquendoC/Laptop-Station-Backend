@@ -6,24 +6,40 @@ info:
 paths:
   "/current_user":
     get:
-      summary: Returns the current user
+      summary: Retrieves the current user
       tags:
       - Current User
       security:
-      - Bearer: []
+      - bearer_auth: []
       responses:
         '200':
-          description: returns the current user
+          description: current user retrieved
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/User"
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+                    format: email
+                  created_at:
+                    type: string
+                    format: date_time
+                  updated_at:
+                    type: string
+                    format: date_time
+                required:
+                - id
+                - name
+                - email
+                - created_at
+                - updated_at
         '401':
           description: unauthorized
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Error"
   "/items":
     get:
       summary: Retrieves all items
@@ -144,11 +160,28 @@ paths:
           description: unauthorized
         '404':
           description: item not found
+    delete:
+      summary: Deletes an item
+      tags:
+      - Items
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: item deleted
+        '401':
+          description: unauthorized
+        '404':
+          description: item not found
   "/reserves":
     post:
       summary: create a reservation
       tags:
-      - Reserve
+      - Reservations
       security:
       - bearer_auth: []
       parameters: []
@@ -205,7 +238,7 @@ paths:
     get:
       summary: list all reserves
       tags:
-      - Reserve
+      - Reservations
       security:
       - bearer_auth: []
       responses:
@@ -229,9 +262,31 @@ paths:
                 - item_id
                 - user_id
                 - date
+  "/reserves/{id}":
+    delete:
+      summary: Deletes a reserve
+      tags:
+      - Reservations
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: reserve deleted
+        '401':
+          description: unauthorized
+        '404':
+          description: reserve not found
   "/registrations":
     post:
       summary: Registration user
+      tags:
+      - Registrations
       parameters: []
       responses:
         '200':
