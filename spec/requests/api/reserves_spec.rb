@@ -6,8 +6,8 @@ RSpec.describe ReservesController, type: :controller do
       let(:user) { FactoryBot.create(:user) }
       let!(:item1) { FactoryBot.create(:item) }
       let!(:item2) { FactoryBot.create(:item) }
-      let!(:reserve1) { FactoryBot.create(:reserve, user:, item: item1) }
-      let!(:reserve2) { FactoryBot.create(:reserve, user:, item: item2) }
+      let!(:reserve1) { FactoryBot.create(:reserve, :user, item: item1) }
+      let!(:reserve2) { FactoryBot.create(:reserve, :user, item: item2) }
 
       before do
         sign_in user

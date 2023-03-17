@@ -115,7 +115,7 @@ RSpec.describe ItemsController, type: :request do
   end
   describe ItemsController do
     let(:user) { create(:user) }
-    let(:item) { create(:item, user:) }
+    let(:item) { create(:item, :user) }
 
     describe 'PUT #update' do
       context 'with valid parameters' do
