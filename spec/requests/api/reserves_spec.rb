@@ -4,7 +4,7 @@ RSpec.describe 'api/users/reserves', type: :request do
   describe 'reserves' do
     path '/reserves' do
       post 'create a reservation' do
-        tags 'Reserve'
+        tags 'Reservations'
         consumes 'application/json'
         produces 'application/json'
         security [bearer_auth: []]
@@ -50,7 +50,7 @@ RSpec.describe 'api/users/reserves', type: :request do
       end
 
       get 'list all reserves' do
-        tags 'Reserve'
+        tags 'Reservations'
         produces 'application/json'
         security [bearer_auth: []]
 
@@ -65,6 +65,47 @@ RSpec.describe 'api/users/reserves', type: :request do
                  required: %w[id item_id user_id date]
 
           let(:Authorization) { "Basic #{JSONWebToken.encode(user_id: 1)}" }
+          run_test!
+        end
+      end
+    end
+  end
+  describe 'Reserves API' do
+    path '/reserves/{id}' do
+      delete 'Deletes a reserve' do
+        tags 'Reservations'
+        security [bearerAuth: []]
+        parameter name: :id, in: :path, type: :integer
+
+        response '204', 'reserve deleted' do
+          let(:user) { create(:user) }
+          let(:item) { create(:item) }
+          let(:reserve) { create(:reserve, user:, item:) }
+          let(:Authorization) { "Bearer #{user.authentication_token}" }
+          let(:id) { reserve.id }
+
+          before do
+            @initial_reserves_count = Reserve.count
+          end
+
+          run_test!
+
+          after do
+            expect(Reserve.count).to eq(@initial_reserves_count - 1)
+          end
+        end
+
+        response '401', 'unauthorized' do
+          let(:id) { create(:reserve).id }
+
+          run_test!
+        end
+
+        response '404', 'reserve not found' do
+          let(:user) { create(:user) }
+          let(:Authorization) { "Bearer #{user.authentication_token}" }
+          let(:id) { 0 }
+
           run_test!
         end
       end
